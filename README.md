@@ -14,21 +14,22 @@ Drop a lightweight widget on your site. FeedbackPulse captures responses, summar
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | Next.js |
-| Backend | FastAPI (Python) |
-| Real time | WebSockets |
-| AI | Gemini API |
-| Database | PostgreSQL |
-| Auth | Clerk |
-| Payments | Stripe |
+| Layer     | Technology       |
+| --------- | ---------------- |
+| Frontend  | Next.js          |
+| Backend   | FastAPI (Python) |
+| Real time | WebSockets       |
+| AI        | Gemini API       |
+| Database  | PostgreSQL       |
+| Auth      | Clerk            |
+| Payments  | Stripe           |
 
 ## Status
 
-🚧 Active development — Day 2 of 10-day build sprint.
+🚧 Active development — Day 3 of 10-day build sprint.
 
 ## Getting Started
+
 ```bash
 # Clone the repo
 git clone https://github.com/yourusername/feedbackpulse
@@ -48,8 +49,8 @@ npm run dev
 
 - [x] Project setup & architecture
 - [x] Database schema & models
-- [ ] Embeddable widget
-- [ ] FastAPI feedback endpoints
+- [x] Embeddable widget
+- [x] FastAPI feedback endpoints
 - [ ] WebSocket real-time updates
 - [ ] Gemini AI summarization
 - [ ] Dashboard UI
