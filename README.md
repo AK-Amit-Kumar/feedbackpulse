@@ -1,4 +1,5 @@
 # FeedbackPulse
+![FeedbackPulseLOGOGIF-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/c0fc3dba-0220-44fc-8260-a986495e56e2)
 
 A micro SaaS for product teams to collect, analyze, and act on user feedback - "in real time".
 
