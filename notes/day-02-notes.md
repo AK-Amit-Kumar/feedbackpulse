@@ -30,8 +30,8 @@ feedbackpulse/
 ```
 USERS                    PROJECTS                 FEEDBACK
 :::::::::::::::::        :::::::::::::::::        :::::::::::::::::
-id (PK, UUID)    ::┐     id (PK, UUID)    ::┐    id (PK, UUID)
-clerk_id              └::► user_id (FK)        └::► project_id (FK)
+id (PK, UUID)    --┐__    id (PK, UUID)    --┐     id (PK, UUID)
+clerk_id              └-► user_id (FK)        └--► project_id (FK)
 email                    name                     content
 created_at               created_at               created_at
 ```
@@ -302,24 +302,24 @@ Project scaffolding tools like `create-next-app` often auto-initialize git. Alwa
 
 ```
 Python model class (User, Project, Feedback)
-        :
-        : SQLAlchemy reads class definitions
-        :
+        |
+        | SQLAlchemy reads class definitions
+        |
         ▼
 CREATE TABLE SQL generated and sent to PostgreSQL on server start
-        :
-        : Tables created in Supabase if they do not exist
-        :
+        |
+        | Tables created in Supabase if they do not exist
+        |
         ▼
 FastAPI endpoint receives a request
-        :
-        : get_db() creates a session via Depends()
-        :
+        |
+        | get_db() creates a session via Depends()
+        |
         ▼
 SQLAlchemy ORM executes queries (SELECT, INSERT, UPDATE)
-        :
-        : Results returned as Python objects
-        :
+        |
+        | Results returned as Python objects
+        |
         ▼
 FastAPI serializes response and sends JSON back to client
 ```
