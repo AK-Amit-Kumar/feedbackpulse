@@ -1,6 +1,7 @@
-# Day 1 — Project Setup + Authentication
+# Day 1 - Project Setup + Authentication
 
 ## What Was Built
+
 - Next.js frontend running at `localhost:3000`
 - FastAPI backend running at `localhost:8000`
 - Clerk authentication integrated — login, signup, protected `/dashboard` route working
@@ -45,7 +46,7 @@ def root():
 Imports the FastAPI class. This brings in all the tools needed to build the API.
 
 **`app = FastAPI()`**
-Creates the application instance. This `app` object is what uvicorn runs — it is the entire backend.
+Creates the application instance. This `app` object is what uvicorn runs - it is the entire backend.
 
 **`@app.get("/")`**
 A decorator that registers a route. When someone sends a GET request to `/`, run the function below. GET is the HTTP method used when a browser visits a URL.
@@ -58,8 +59,8 @@ Returns a Python dictionary which FastAPI automatically converts to JSON and sen
 ### `frontend/app/layout.js`
 
 ```javascript
-import { ClerkProvider } from '@clerk/nextjs'
-import './globals.css'
+import { ClerkProvider } from "@clerk/nextjs";
+import "./globals.css";
 
 export default function RootLayout({ children }) {
   return (
@@ -68,7 +69,7 @@ export default function RootLayout({ children }) {
         <body>{children}</body>
       </html>
     </ClerkProvider>
-  )
+  );
 }
 ```
 
@@ -76,7 +77,7 @@ export default function RootLayout({ children }) {
 Wraps the entire app. React uses "context" to share data between components without passing it manually through props. `ClerkProvider` injects auth state (is user logged in? who are they?) into this context so any component anywhere in the app can access it.
 
 **`{children}`**
-Whatever page is currently being rendered inside this layout. The layout is the frame — children is the picture inside it. Every page in the app renders inside this wrapper.
+Whatever page is currently being rendered inside this layout. The layout is the frame - children is the picture inside it. Every page in the app renders inside this wrapper.
 
 **Why `layout.js`?**
 In Next.js App Router, `layout.js` is the root wrapper of the entire app. Anything placed here applies to every page automatically. The perfect place for providers like Clerk.
@@ -86,24 +87,24 @@ In Next.js App Router, `layout.js` is the root wrapper of the entire app. Anythi
 ### `frontend/middleware.js`
 
 ```javascript
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-const isProtectedRoute = createRouteMatcher(['/dashboard(.*)'])
+const isProtectedRoute = createRouteMatcher(["/dashboard(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedRoute(req)) await auth.protect()
-})
+  if (isProtectedRoute(req)) await auth.protect();
+});
 
 export const config = {
-  matcher: ['/((?!_next|.*\\..*).*)'],
-}
+  matcher: ["/((?!_next|.*\\..*).*)"],
+};
 ```
 
 **`createRouteMatcher(['/dashboard(.*)'])`**
-Creates a function that checks if the current URL matches `/dashboard` or anything under it. The `(.*)` is a regex pattern meaning "anything after /dashboard" — so `/dashboard/settings` is also protected.
+Creates a function that checks if the current URL matches `/dashboard` or anything under it. The `(.*)` is a regex pattern meaning "anything after /dashboard" - so `/dashboard/settings` is also protected.
 
 **Why middleware instead of inside the page?**
-Middleware runs on every request *before* the page loads — like a security guard at the door. If someone tries to visit `/dashboard` without being logged in, they are redirected before any page code runs. If the check lived inside the page, the page would partially load first.
+Middleware runs on every request _before_ the page loads — like a security guard at the door. If someone tries to visit `/dashboard` without being logged in, they are redirected before any page code runs. If the check lived inside the page, the page would partially load first.
 
 **`auth.protect()`**
 If the user is not logged in, automatically redirects to Clerk's login page. No manual redirect code needed.
@@ -116,15 +117,15 @@ Tells Next.js which routes to run this middleware on. The regex means: run on al
 ### `frontend/app/dashboard/page.js`
 
 ```javascript
-import { UserButton } from '@clerk/nextjs'
+import { UserButton } from "@clerk/nextjs";
 
 export default function Dashboard() {
   return (
-    <div style={{ padding: '2rem' }}>
+    <div style={{ padding: "2rem" }}>
       <h1>FeedbackPulse Dashboard</h1>
       <UserButton />
     </div>
-  )
+  );
 }
 ```
 
@@ -142,18 +143,21 @@ In Next.js App Router, folders map directly to URL routes. A file at `app/dashbo
 ## Core Concepts
 
 ### Next.js
+
 A framework built on top of React. Adds file-based routing (folders = URLs), server-side capabilities, and built-in optimisations. Industry standard for SaaS frontends.
 
 **Why Next.js over plain React?**
 Plain React only handles UI. Next.js adds routing, server rendering, API routes, and performance optimisations out of the box. No separate router library needed.
 
 ### FastAPI
+
 A modern Python framework for building APIs. When the frontend needs data, it sends a request to FastAPI. FastAPI processes it and sends back a response.
 
 **Why FastAPI?**
 Faster than Flask and Django for APIs. Auto-generates interactive documentation at `/docs`. Built for modern Python — async support, type hints, automatic validation.
 
 ### Clerk
+
 Authentication as a service. Handles login pages, signup, sessions, password reset, and OAuth. Plug it in and it works.
 
 **Why Clerk instead of building auth from scratch?**
@@ -164,6 +168,7 @@ Building auth is complex and risky — sessions, token rotation, hashed password
 ## Environment Variables
 
 ### `frontend/.env.local`
+
 ```
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
 CLERK_SECRET_KEY=sk_test_...
@@ -178,7 +183,8 @@ If API keys are in the code and you push to GitHub, anyone can see and misuse th
 
 ## Errors Encountered
 
-### Error 1 — Could not import module "main"
+### Error 1 - Could not import module "main"
+
 ```
 ERROR: Error loading ASGI app. Could not import module "main".
 ```
@@ -194,7 +200,8 @@ Always check your terminal path before creating files. Your code lives in `backe
 
 ---
 
-### Error 2 — Missing `src/` folder confusion
+### Error 2 - Missing `src/` folder confusion
+
 **Why it happened:**
 `create-next-app` can generate projects with or without a `src/` folder depending on the options selected. This caused confusion about where to place files.
 
