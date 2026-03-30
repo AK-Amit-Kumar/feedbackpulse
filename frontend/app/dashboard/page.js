@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { UserButton } from '@clerk/nextjs'
 import Image from 'next/image'
 import { useCurrentUser } from '../../lib/useCurrentUser'
@@ -16,11 +16,21 @@ export default function Dashboard() {
   const [newProjectName, setNewProjectName] = useState('')
   const [loading, setLoading] = useState(true)
   const [copied, setCopied] = useState(false)
+  const wsRef = useRef(null)
+  const [wsStatus, setWsStatus] = useState('disconnected')
 
   useEffect(() => {
     if (!isLoaded || !clerkId) return
     syncUser()
   }, [isLoaded, clerkId])
+
+  useEffect(() => {
+    return () => {
+      if (wsRef.current) {
+        wsRef.current.close()
+      }
+    }
+  }, [])
 
   async function syncUser() {
     try {
@@ -76,9 +86,39 @@ export default function Dashboard() {
     try {
       const res = await api.get(`/feedback/${project.id}`)
       setFeedback(res.data)
+      connectWebsocket(project.id)
     } catch (err) {
       console.error('Error fetching feedback:', err)
     }
+  }
+
+  function connectWebsocket(projectId) {
+    if (wsRef.current) {
+      wsRef.current.close()
+    }
+
+    const ws = new WebSocket(`ws://localhost:8000/feedback/ws/${projectId}`)
+
+    ws.onopen = () => {
+      setWsStatus('connected')
+      console.log('WebSocket connected for project:', projectId)
+    }
+
+    ws.onmessage = (event) => {
+      const newFeedback = JSON.parse(event.data)
+      setFeedback(prev => [newFeedback, ...prev])
+    }
+
+    ws.onclose = () => {
+      setWsStatus('disconnected')
+    }
+
+    ws.onerror = (err) => {
+      console.error('WebSocket error:', err)
+      setWsStatus('disconnected')
+    }
+
+    wsRef.current = ws
   }
 
   if (!isLoaded || loading) {
@@ -139,7 +179,12 @@ export default function Dashboard() {
         <div className={styles.feedbackColumn}>
           {selectedProject ? (
             <>
-              <h2>{selectedProject.name} : Feedback</h2>
+              <div className={styles.feedbackHeader}>
+                <h2>{selectedProject.name} : Feedback</h2>
+                <span className={wsStatus === 'connected' ? styles.statusConnected : styles.statusDisconnected}>
+                  {wsStatus === 'connected' ? 'Live' : 'Offline'}
+                </span>
+              </div>
 
               <div className={styles.embedBox}>
                 <div className={styles.embedHeader}>
