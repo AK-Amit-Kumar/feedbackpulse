@@ -7,6 +7,13 @@ from models import Feedback, Project
 from schemas import FeedbackCreate, FeedbackResponse
 from typing import List
 from uuid import UUID
+import os
+from dotenv import load_dotenv
+import google.generativeai as genai
+
+load_dotenv()
+
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 router = APIRouter(prefix="/feedback", tags=["feedback"])
 
@@ -50,3 +57,39 @@ async def websocket_endpoint(websocket: WebSocket, project_id: str):
             await websocket.receive_text()
     except WebSocketDisconnect:
         manager.disconnect(websocket, project_id)
+        
+@router.get("/summary/{project_id}")
+async def get_feedback_summary(project_id: str, db: Session = Depends(get_db)):
+    from uuid import UUID
+    
+    try:
+        project_uuid = UUID(project_id)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid Project ID")
+    
+    feedback_list = db.query(Feedback).filter(
+        Feedback.project_id == project_uuid
+    ).all()
+    
+    if not feedback_list:
+        return {
+            "summary": "No feedback collected yet for this project."
+        }
+        
+    feedback_text = "\n".join([f.content for f in feedback_list])
+    
+    prompt = f"""You are a product feedback analyst. Analyze the following user feedback and provide:
+            1. Main themes or patterns you notice
+            2. Overall sentiment (positive, mixed, or negative)
+            3. Top 3 actionable improvements users are asking for
+
+            Keep the response concise and structured.
+
+            Feedback:
+            {feedback_text}"""
+    
+    model = genai.GenerativeModel("gemini-2.5-flash")
+    response = model.generate_content(prompt)
+    
+    return {"summary": response.text}
+    

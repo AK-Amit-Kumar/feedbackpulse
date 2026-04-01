@@ -18,12 +18,16 @@ export default function Dashboard() {
   const [copied, setCopied] = useState(false)
   const wsRef = useRef(null)
   const [wsStatus, setWsStatus] = useState('disconnected')
+  const [summary, setSummary] = useState('')
+  const [summaryLoading, setSummaryLoading] = useState(false)
+
 
   useEffect(() => {
     if (!isLoaded || !clerkId) return
     syncUser()
   }, [isLoaded, clerkId])
 
+  // cleanup useEffect 
   useEffect(() => {
     return () => {
       if (wsRef.current) {
@@ -83,6 +87,7 @@ export default function Dashboard() {
 
   async function fetchFeedback(project) {
     setSelectedProject(project)
+    setSummary('')
     try {
       const res = await api.get(`/feedback/${project.id}`)
       setFeedback(res.data)
@@ -119,6 +124,24 @@ export default function Dashboard() {
     }
 
     wsRef.current = ws
+  }
+
+  async function fetchSummary() {
+    if (!selectedProject) return
+    setSummaryLoading(true)
+    setSummary('')
+
+    try {
+      const res = await api.get(`/feedback/summary/${selectedProject.id}`)
+      setSummary(res.data.summary)
+    }
+    catch (err) {
+      setSummary('Failed to generate summary. Please try again.')
+      console.error('Error ferching summary:', err)
+    }
+    finally {
+      setSummaryLoading(false)
+    }
   }
 
   if (!isLoaded || loading) {
@@ -212,6 +235,23 @@ export default function Dashboard() {
                 <code className={styles.embedCode}>
                   {`<script>FeedbackPulse.init("${selectedProject.id}")</script>`}
                 </code>
+              </div>
+
+              <div className={styles.summarySection}>
+                <button
+                  onClick={fetchSummary}
+                  disabled={summaryLoading}
+                  className={styles.buttonSummary}
+                >
+                  {summaryLoading ? 'Generating...' : 'Get AI Summary'}
+                </button>
+
+                {summary && (
+                  <div className={styles.summaryCard}>
+                    <p className={styles.summaryLabel}>AI Summary</p>
+                    <p className={styles.summaryText}>{summary}</p>
+                  </div>
+                )}
               </div>
 
               {feedback.length === 0
