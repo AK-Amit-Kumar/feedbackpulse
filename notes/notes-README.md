@@ -15,6 +15,14 @@ An AI-powered micro-SaaS where product teams embed a lightweight widget on their
 
 ## Visual Build Log
 
+### Day 6 : Gemini AI Feedback Summarization
+
+![Day6_demo_gif](Day6_feedbackAISummary-1.gif)
+
+> One click on Get AI Summary reads all collected feedback for the project and returns structured AI insights : main themes, overall sentiment, and the top 3 actionable improvements. Powered by Gemini 2.5 Flash.
+
+---
+
 ### Day 5 : Real-Time Dashboard with WebSockets
 
 ![Day5_demo_gif](Day5_Websockets.gif)
@@ -32,7 +40,7 @@ An AI-powered micro-SaaS where product teams embed a lightweight widget on their
 | Day 3  | Feedback API, embeddable widget             | [day-03-notes.md](./day-03-notes.md) |
 | Day 4  | Dashboard UI, user sync, CSS Modules        | [day-04-notes.md](./day-04-notes.md) |
 | Day 5  | WebSockets, real-time updates, LIVE badge   | [day-05-notes.md](./day-05-notes.md) |
-| Day 6  | Gemini AI summarization                     | Coming soon                          |
+| Day 6  | Gemini AI summarization                     | [day-06-notes.md](./day-06-notes.md) |
 | Day 7  | Stripe billing                              | Coming soon                          |
 | Day 8  | Deployment : Vercel + Render                | Coming soon                          |
 | Day 9  | Polish + demo video                         | Coming soon                          |
