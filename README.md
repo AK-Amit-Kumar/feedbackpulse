@@ -27,7 +27,7 @@ Drop a lightweight widget on your site. FeedbackPulse captures responses, summar
 
 ## Status
 
-🚧 Active development — Day 3 of 10-day build sprint.
+🚧 Active development — Day 7 of 10-day build sprint.
 
 ## Getting Started
 
@@ -52,9 +52,9 @@ npm run dev
 - [x] Database schema & models
 - [x] Embeddable widget
 - [x] FastAPI feedback endpoints
-- [ ] WebSocket real-time updates
-- [ ] Gemini AI summarization
-- [ ] Dashboard UI
-- [ ] Clerk auth integration
+- [x] WebSocket real-time updates
+- [x] Gemini AI summarization
+- [x] Dashboard UI
+- [x] Clerk auth integration
 - [ ] Stripe billing
 - [ ] Deployment
