@@ -53,9 +53,9 @@ npm run dev
 - [x] Database schema & models
 - [x] Embeddable widget
 - [x] FastAPI feedback endpoints
-- [ ] WebSocket real-time updates
-- [ ] Gemini AI summarization
-- [ ] Dashboard UI
-- [ ] Clerk auth integration
-- [ ] Stripe billing
+- [x] WebSocket real-time updates
+- [x] Gemini AI summarization
+- [x] Dashboard UI
+- [x] Clerk auth integration
+- [x] Stripe billing
 - [ ] Deployment
