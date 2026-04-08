@@ -20,12 +20,28 @@ export default function Dashboard() {
   const [wsStatus, setWsStatus] = useState('disconnected')
   const [summary, setSummary] = useState('')
   const [summaryLoading, setSummaryLoading] = useState(false)
+  const [userPlan, setUserPlan] = useState('free')
+  const [upgrading, setUpgrading] = useState(false)
 
 
   useEffect(() => {
     if (!isLoaded || !clerkId) return
     syncUser()
   }, [isLoaded, clerkId])
+
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('success') === 'true') {
+      alert('You are now on the Pro Plan! Welcome to Feedback Pro.')
+      window.history.replaceState({}, '', '/dashboard')
+    }
+
+    if (params.get('cancelled') === 'true') {
+      alert('Upgrade cancelled. You are still on the free plans.')
+      window.history.replaceState({}, '', '/dashboard')
+    }
+  }, [])
 
   // cleanup useEffect 
   useEffect(() => {
@@ -43,6 +59,7 @@ export default function Dashboard() {
         email: email,
       })
       setUser(res.data)
+      setUserPlan(res.data.plan)
       fetchProjects(res.data.id)
     } catch (err) {
       console.error('Error syncing user:', err)
@@ -136,13 +153,34 @@ export default function Dashboard() {
       setSummary(res.data.summary)
     }
     catch (err) {
-      setSummary('Failed to generate summary. Please try again.')
-      console.error('Error ferching summary:', err)
+      const errorMessage = err.response?.data?.detail || 'Failed to generate summary. Please try again.'
+      setSummary(errorMessage)
+      console.error('Error fetching summary:', err)
     }
     finally {
       setSummaryLoading(false)
     }
   }
+
+  async function handleUpgrade() {
+    setUpgrading(true)
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stripe/create-checkout-session`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clerkId: clerkId }),
+      })
+
+      const data = await res.json()
+      window.location.href = data.url
+    } catch (err) {
+      console.error('Upgrade failed:', err)
+    } finally {
+      setUpgrading(false)
+    }
+  }
+
 
   if (!isLoaded || loading) {
     return <div className={styles.loadingState}>Loading...</div>
@@ -163,6 +201,23 @@ export default function Dashboard() {
           <h1>FeedbackPulse</h1>
         </div>
         <UserButton />
+      </div>
+
+      <div className={styles.planBadge}>
+        {userPlan === 'pro' ? (
+          <span className={styles.proBadge}>PRO Plan</span>
+        ) : (
+          <div className={styles.freeSection}>
+            <span className={styles.freeBadge}>FREE Plan</span>
+            <button
+              className={styles.upgradeButton}
+              onClick={handleUpgrade}
+              disabled={upgrading}
+            >
+              {upgrading ? 'Redirecting...' : 'Upgrade to Pro'}
+            </button>
+          </div>
+        )}
       </div>
 
       <div className={styles.createSection}>

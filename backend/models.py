@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Text, DateTime, ForeignKey
+from sqlalchemy import Column, String, Text, DateTime, ForeignKey, Integer
 from sqlalchemy.dialects.postgresql import UUID
 from database import Base
 import uuid
@@ -11,6 +11,8 @@ class User(Base):
     clerk_id = Column(String, unique=True, nullable=False)
     email = Column(String, unique=True, nullable=False)
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
+    plan = Column(String, default="free", nullable=False)
+    feedback_count = Column(Integer, default=0, nullable=False)
     #replacing utcnow with timezone.utc due to deprecation of utcnow
     # created_at = Column(DateTime, default=datetime.utcnow)
 

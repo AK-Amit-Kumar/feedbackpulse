@@ -438,3 +438,61 @@
     line-height: 1.8;
     white-space: pre-wrap;
 }
+
+.planBadge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+}
+
+
+.proBadge {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+
+.freeBadge {
+    background: #2d2d2d;
+    color: #aaa;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+
+.freeSection {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+.upgradeButton {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+
+.upgradeButton:hover {
+    opacity: 0.85;
+}
+
+.upgradeButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

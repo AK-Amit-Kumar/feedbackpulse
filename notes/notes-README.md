@@ -15,6 +15,13 @@ An AI-powered micro-SaaS where product teams embed a lightweight widget on their
 
 ## Visual Build Log
 
+### Day 7 : Stripe Billing
+
+![Day7_demo_gif1](Day7_gif1.gif)
+![Day7_demo_gif2](Day7_gif2.gif)
+
+> Stripe billing demo showing FREE plan badge, Upgrade to Pro button, Stripe checkout, and PRO plan badge after payment
+
 ### Day 6 : Gemini AI Feedback Summarization
 
 ![Day6_demo_gif](Day6_feedbackAISummary-1.gif)
@@ -41,7 +48,7 @@ An AI-powered micro-SaaS where product teams embed a lightweight widget on their
 | Day 4  | Dashboard UI, user sync, CSS Modules        | [day-04-notes.md](./day-04-notes.md) |
 | Day 5  | WebSockets, real-time updates, LIVE badge   | [day-05-notes.md](./day-05-notes.md) |
 | Day 6  | Gemini AI summarization                     | [day-06-notes.md](./day-06-notes.md) |
-| Day 7  | Stripe billing                              | Coming soon                          |
+| Day 7  | Stripe billing                              | [day-07-notes.md](./day-07-notes.md) |
 | Day 8  | Deployment : Vercel + Render                | Coming soon                          |
 | Day 9  | Polish + demo video                         | Coming soon                          |
 | Day 10 | Launch                                      | Coming soon                          |

@@ -1,4 +1,5 @@
 # FeedbackPulse
+
 ![FeedbackPulseLOGOGIF-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/c0fc3dba-0220-44fc-8260-a986495e56e2)
 
 A micro SaaS for product teams to collect, analyze, and act on user feedback - "in real time".
@@ -52,9 +53,9 @@ npm run dev
 - [x] Database schema & models
 - [x] Embeddable widget
 - [x] FastAPI feedback endpoints
-- [ ] WebSocket real-time updates
-- [ ] Gemini AI summarization
-- [ ] Dashboard UI
-- [ ] Clerk auth integration
-- [ ] Stripe billing
+- [x] WebSocket real-time updates
+- [x] Gemini AI summarization
+- [x] Dashboard UI
+- [x] Clerk auth integration
+- [x] Stripe billing
 - [ ] Deployment

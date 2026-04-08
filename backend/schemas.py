@@ -37,6 +37,8 @@ class UserResponse(BaseModel):
     clerk_id: str
     email: str
     created_at: datetime
+    plan: str
+    feedback_count: int
     
     class Config:
         from_attributes = True

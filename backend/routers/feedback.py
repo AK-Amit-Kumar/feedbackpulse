@@ -3,7 +3,7 @@ from websocket_manager import manager
 import json
 from sqlalchemy.orm import Session
 from database import get_db
-from models import Feedback, Project
+from models import Feedback, Project, User
 from schemas import FeedbackCreate, FeedbackResponse
 from typing import List
 from uuid import UUID
@@ -22,6 +22,20 @@ async def create_feedback(feedback: FeedbackCreate, db: Session = Depends(get_db
     project = db.query(Project).filter(Project.id == feedback.project_id).first()
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
+    
+    owner = db.query(User).filter(User.id == project.user_id).first()
+    
+    if owner and owner.plan == "free" and owner.feedback_count >= 50:
+        raise HTTPException(
+            status_code=403,
+            detail="Free plan limit reached. Upgrade to Pro for unlimited feedback."
+        )
+    
+    if owner and owner.plan == "free":
+        owner.feedback_count += 1
+        db.commit()
+    
+    
     
     db_feedback = Feedback(
         project_id = feedback.project_id,
@@ -66,6 +80,19 @@ async def get_feedback_summary(project_id: str, db: Session = Depends(get_db)):
         project_uuid = UUID(project_id)
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid Project ID")
+    
+    project = db.query(Project).filter(Project.id == project_uuid).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    
+    owner = db.query(User).filter(User.id == project.user_id).first()
+    
+    if owner and owner.plan == "free":
+        raise HTTPException(
+            status_code=403,
+            detail="AI Summary is a Pro feature. Upgrade     to Pro to unlock."
+        )
+    
     
     feedback_list = db.query(Feedback).filter(
         Feedback.project_id == project_uuid
